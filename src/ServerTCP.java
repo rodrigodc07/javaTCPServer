@@ -1,27 +1,30 @@
-import java.io.IOException;
+import Menssage.Request;
+import Menssage.RequestFactory;
+import Menssage.StringRequest;
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Date;
 
 public class ServerTCP {
     public static void main(String[] args) {
         try {
             int port = 12345;
             ServerSocket servidor = new ServerSocket(port);
+            RequestFactory requestFactory = new RequestFactory();
             System.out.println("Servidor criado com sucesso na porta "+ port);
             while(true) {
                 Socket cliente = servidor.accept();
                 System.out.println("Cliente conectado: " + cliente.getInetAddress().getHostAddress());
 
-                ObjectInputStream response = new ObjectInputStream(cliente.getInputStream());
-                String msg_recived = (String)response.readObject();
+                ObjectInputStream request = new ObjectInputStream(cliente.getInputStream());
+                Request msg_received = requestFactory.getRequest(request);
 
-                ObjectOutputStream msg_to_send = new ObjectOutputStream(cliente.getOutputStream());
-                msg_to_send.flush();
-                msg_to_send.writeObject(msg_recived.toLowerCase());
-                msg_to_send.close();
+                ObjectOutputStream response = new ObjectOutputStream(cliente.getOutputStream());
+                response.flush();
+                response.writeObject(msg_received.generateResponse());
+                response.close();
                 cliente.close();
             }
         }
