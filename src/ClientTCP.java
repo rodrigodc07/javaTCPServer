@@ -9,10 +9,9 @@ public class ClientTCP {
     try {
       Socket cliente = new Socket("localhost",12345);
 
-      ObjectOutputStream msg_to_send = new ObjectOutputStream(cliente.getOutputStream());
-      msg_to_send.flush();
-      msg_to_send.writeObject("One");
-      msg_to_send.close();
+      ObjectOutputStream request = new ObjectOutputStream(cliente.getOutputStream());
+      request.flush();
+      request.writeObject("Carlos");
 
       ObjectInputStream response = new ObjectInputStream(cliente.getInputStream());
       String data_atual = (String)response.readObject();
