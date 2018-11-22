@@ -4,20 +4,22 @@ public class StringRequest implements Request {
 
     private String request;
 
-    public StringRequest(Object request) {
+    StringRequest(Object request) {
         this.request = (String) request;
     }
 
-    public String invertCase(String s){
+    private String invertString(String s){
         StringBuilder new_string = new StringBuilder();
-        for (Character c : s.toCharArray()) {
-            c = Character.isUpperCase(c) ? Character.toLowerCase(c) : Character.toUpperCase(c);
+        char[] charArray = s.toCharArray();
+        char c;
+        for (int i = s.length()-1; i >= 0;i--) {
+            c = charArray[i];
             new_string.append(c);
         }
         return new_string.toString();
     }
     @Override
     public Object generateResponse() {
-        return invertCase(request);
+        return invertString(request);
     }
 }

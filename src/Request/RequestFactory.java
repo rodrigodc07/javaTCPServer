@@ -43,6 +43,10 @@ public class RequestFactory {
         }
         if (requestIsString(aux))
             return new StringRequest(aux);
+        if (requestIsChar(aux))
+            return new CharRequest(aux);
+        if (requestIsInt(aux))
+            return new IntRequest(aux);
         throw new UnsuportTypeException("Tipo não permitido");
     }
 }
