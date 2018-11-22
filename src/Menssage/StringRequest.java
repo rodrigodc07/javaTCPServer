@@ -7,12 +7,8 @@ public class StringRequest implements Request {
 
     private String request;
 
-    public StringRequest(ObjectInputStream request) {
-        try {
-            this.request = (String) request.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+    public StringRequest(Object request) {
+        this.request = (String) request;
     }
 
     public String invertCase(String s){

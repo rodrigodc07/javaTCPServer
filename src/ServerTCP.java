@@ -1,3 +1,4 @@
+import Exceptions.UnsuportTypeException;
 import Menssage.Request;
 import Menssage.RequestFactory;
 import Menssage.StringRequest;
@@ -19,13 +20,18 @@ public class ServerTCP {
                 System.out.println("Cliente conectado: " + cliente.getInetAddress().getHostAddress());
 
                 ObjectInputStream request = new ObjectInputStream(cliente.getInputStream());
-                Request msg_received = requestFactory.getRequest(request);
-
                 ObjectOutputStream response = new ObjectOutputStream(cliente.getOutputStream());
-                response.flush();
-                response.writeObject(msg_received.generateResponse());
-                response.close();
-                cliente.close();
+                try {
+                    Request msg_received = requestFactory.getRequest(request);
+                    response.flush();
+                    response.writeObject(msg_received.generateResponse());
+                    response.close();
+                    cliente.close();
+                }catch (Exception e){
+                    response.flush();
+                    response.writeObject(e.getMessage());
+                    response.close();
+                }
             }
         }
         catch(Exception e) {
