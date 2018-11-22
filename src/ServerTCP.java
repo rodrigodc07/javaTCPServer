@@ -17,18 +17,18 @@ public class ServerTCP {
                 Socket cliente = servidor.accept();
                 System.out.println("Cliente conectado: " + cliente.getInetAddress().getHostAddress());
 
-                ObjectInputStream request = new ObjectInputStream(cliente.getInputStream());
-                ObjectOutputStream response = new ObjectOutputStream(cliente.getOutputStream());
+                ObjectInputStream request_stream = new ObjectInputStream(cliente.getInputStream());
+                ObjectOutputStream response_stream = new ObjectOutputStream(cliente.getOutputStream());
+                response_stream.flush();
                 try {
-                    Request msg_received = requestFactory.getRequest(request);
-                    response.flush();
-                    response.writeObject(msg_received.generateResponse());
-                    response.close();
-                    cliente.close();
+                    Request request = requestFactory.getRequest(request_stream);
+                    Object response = request.generateResponse();
+                    response_stream.writeObject(response);
                 }catch (Exception e){
-                    response.flush();
-                    response.writeObject(e.getMessage());
-                    response.close();
+                    response_stream.writeObject(e.getMessage());
+                }
+                finally {
+                    response_stream.close();
                 }
             }
         }
