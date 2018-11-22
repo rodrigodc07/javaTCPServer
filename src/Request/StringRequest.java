@@ -1,7 +1,4 @@
-package Menssage;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
+package Request;
 
 public class StringRequest implements Request {
 
