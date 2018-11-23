@@ -17,33 +17,47 @@ function getMessage(type,body) {
   return type + HEAD_SEPARATOR + body + MESSAGE_EOF;
 }
 
-
-function handleRawType(type) {
+function handleRawType(type) {  
   switch (type.toLowerCase()) {
     case "string":
-    	return '1';
-    case "integer":
-    	return '2';
+    	return 1; 
+    case "int":
+    	return 2;   
     case "char":
-    	return '3';
+    	return 3;
     default:
-        return '-1';
+        return -1;
 	}
 }
 
-function validateBody(type,body) {
-  return type + HEAD_SEPARATOR + body + MESSAGE_EOF;
-}
+var inquirer = require('inquirer');
+
+
+var questions = [
+  {
+    type: 'list',
+    name: 'type',
+    message: 'Qual o tipo da sua Menssagem (String | Integer | Char)',
+    choices: ['String', 'Char', 'Int'],
+    filter: function(val) {
+      return handleRawType(val);
+    }
+  },
+  {
+    type: 'input',
+    name: 'body',
+    message: "Digite A Menssagem "
+	}
+];
+
 
 var client = new net.Socket();
 client.connect(PORT, HOST, function() {
     console.log('CONNECTED TO: ' + HOST + ':' + PORT);
-	rl.question('Qual o tipo da sua Menssagem (String | Integer | Char)\n', (type) => {
-		type = handleRawType(type);
-		rl.question('Digite A Menssagem ', (body) => {
-			 client.write(getMessage(type,body));
-     		 rl.close();
-   		});
+	inquirer.prompt(questions).then(answers => {
+		type = answers.type;
+		body = answers.body;
+		client.write(getMessage(type,body));
 	});
 });
 
