@@ -24,6 +24,7 @@ function handleRawType(type) {
         return -1;
 	}
 }
+
 var questions = [
   {
     type: 'list',
@@ -62,14 +63,11 @@ client.connect(PORT, HOST, function() {
     doQuestion();
 });
 
-// Add a 'data' event handler for the client socket
-// data is what the server sent to this socket
 client.on('data', function(data) {
     console.log("Received:", data.toString())
     client.destroy();
 });
 
-// Add a 'close' event handler for the client socket
 client.on('close', function() {
     console.log('Connection closed');
 });
