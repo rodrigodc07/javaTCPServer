@@ -4,8 +4,8 @@ public class StringRequest implements Request {
 
     private String request;
 
-    StringRequest(Object request) {
-        this.request = (String) request;
+    StringRequest(String request) {
+        this.request = request;
     }
 
     private String invertString(String s){

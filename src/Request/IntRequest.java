@@ -4,8 +4,8 @@ public class IntRequest implements Request {
 
     private Integer request;
 
-    IntRequest(Object request) {
-        this.request = (Integer) request;
+    IntRequest(String request) {
+        this.request = Integer.parseInt(request) ;
     }
 
     @Override

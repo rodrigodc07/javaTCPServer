@@ -4,8 +4,8 @@ public class CharRequest implements Request {
 
     private Character request;
 
-    CharRequest(Object request) {
-        this.request = (Character) request;
+    CharRequest(String request) {
+        this.request = request.charAt(0);
     }
 
     private char invertCase(Character c){
