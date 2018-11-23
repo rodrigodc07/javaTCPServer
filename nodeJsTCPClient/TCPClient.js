@@ -1,4 +1,6 @@
 const net = require('net');
+const validator = require('./validator');
+const inquirer = require('inquirer');
 
 const HOST = '127.0.0.1';
 const PORT = 12345;
@@ -6,25 +8,22 @@ const PORT = 12345;
 const HEAD_SEPARATOR = "\n"
 const MESSAGE_EOF = "\uFFFF"
 
-function getMessage(type,body) {  
+function getMessage(type,body) {
   return type + HEAD_SEPARATOR + body + MESSAGE_EOF;
 }
 
-function handleRawType(type) {  
+function handleRawType(type) {
   switch (type.toLowerCase()) {
     case "string":
-    	return 1; 
+    	return 1;
     case "int":
-    	return 2;   
+    	return 2;
     case "char":
     	return 3;
     default:
         return -1;
 	}
 }
-
-var inquirer = require('inquirer');
-
 var questions = [
   {
     type: 'list',
@@ -42,32 +41,16 @@ var questions = [
 	}
 ];
 
-function validateString(message){return true}
-
-function validateInteger(message){return message.length == 1}
-
-function validateChar(message){return message.length == 1}
-
-function validate(type,message){
-    switch(type){
-        case 1:
-            return validateString(message);
-        case 2:
-            return validateInteger(message);
-        case 3:
-            return validateChar(message);
-    }
-}
 
 function doQuestion(){
     inquirer.prompt(questions).then(answers => {
         type = answers.type;
         body = answers.body;
-        isValid = validate(type,body);
+        isValid = validator.validate(type,body);
         if(isValid)
             client.write(getMessage(type,body));
         else{
-            console.log("Menssagem não pode ser desde tipo")
+            console.log("Esse tipo não permite essa menssagem")
             doQuestion();
         }
     });
