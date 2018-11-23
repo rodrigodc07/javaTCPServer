@@ -37,30 +37,46 @@ public class RequestFactory {
     }
 
     private String getRequestType(String readLine) throws UnsuportTypeException {
-        switch (readLine) {
-            case "1":
+        char header = readLine.charAt(0);
+        switch (header) {
+            case '1':
                 return "String";
-            case "2":
+            case '2':
                 return "Integer";
-            case "3":
+            case '3':
                 return "Char";
             default:
                 throw new UnsuportTypeException("Tipo não permitido");
         }
     }
 
+    private String getMessage(BufferedReader in) throws IOException {
+        StringBuilder message = new StringBuilder();
+        char sentence;
+        boolean hasNext = true;
+        while (hasNext) {
+            sentence = (char) in.read();
+            if (sentence == '\uFFFF') {
+                hasNext = false;
+            } else {
+                message.append(sentence);
+            }
+        }
+        return message.toString();
+    }
     public Request getRequest(BufferedReader in) throws UnsuportTypeException, BadRequestException {
         String type;
         try {
-            type = getRequestType(in.readLine());
-            String aux = in.readLine();
+            String message = getMessage(in);
+            type = getRequestType(message);
+            message = message.substring(2);
             switch (type) {
                 case "String":
-                    return new StringRequest(aux);
+                    return new StringRequest(message);
                 case "Integer":
-                    return new IntRequest(aux);
+                    return new IntRequest(message);
                 case "Char":
-                    return new CharRequest(aux);
+                    return new CharRequest(message);
                 default:
                     throw new UnsuportTypeException("Tipo não permitido");
             }

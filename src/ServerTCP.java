@@ -24,7 +24,7 @@ public class ServerTCP {
                     Object response = request.generateResponse();
                     response_stream.println(response);
                 }catch (Exception e){
-                    response_stream.println(e.getMessage());
+                    response_stream.println(e);
                 }
                 finally {
                     response_stream.close();
