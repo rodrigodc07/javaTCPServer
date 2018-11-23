@@ -1,12 +1,17 @@
 const net = require('net');
 const validator = require('./validator');
-const inquirer = require('inquirer');
 
 const HOST = '127.0.0.1';
 const PORT = 12345;
 
 const HEAD_SEPARATOR = "\n"
 const MESSAGE_EOF = "\uFFFF"
+
+const readline = require('readline');
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
 function getMessage(type,body) {
   return type + HEAD_SEPARATOR + body + MESSAGE_EOF;
@@ -44,17 +49,19 @@ var questions = [
 
 
 function doQuestion(){
-    inquirer.prompt(questions).then(answers => {
-        type = answers.type;
-        body = answers.body;
-        isValid = validator.validate(type,body);
-        if(isValid)
-            client.write(getMessage(type,body));
-        else{
-            console.log("Esse tipo não permite essa menssagem")
-            doQuestion();
-        }
-    });
+	rl.question('Qual o tipo da sua Menssagem (String | Int | Char)\n', (type) => {
+		type = handleRawType(type);
+		rl.question('Digite A Menssagem ', (body) => {
+		    isValid = validator.validate(type,body);
+     		rl.close();
+            if(isValid)
+                client.write(getMessage(type,body));
+            else{
+                console.log("Esse tipo não permite essa menssagem")
+                doQuestion();
+            }
+   		});
+	});
 }
 
 var client = new net.Socket();
