@@ -1,15 +1,50 @@
-var net = require('net');
+const net = require('net');
 
-var HOST = '127.0.0.1';
-var PORT = 12345;
+const HOST = '127.0.0.1';
+const PORT = 12345;
+
+const HEAD_SEPARATOR = "\n"
+const MESSAGE_EOF = "\uFFFF"
+
+const readline = require('readline');
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+function getMessage(type,body) {  
+  return type + HEAD_SEPARATOR + body + MESSAGE_EOF;
+}
+
+
+function handleRawType(type) {
+  switch (type.toLowerCase()) {
+    case "string":
+    	return '1';
+    case "integer":
+    	return '2';
+    case "char":
+    	return '3';
+    default:
+        return '-1';
+	}
+}
+
+function validateBody(type,body) {
+  return type + HEAD_SEPARATOR + body + MESSAGE_EOF;
+}
 
 var client = new net.Socket();
 client.connect(PORT, HOST, function() {
-
     console.log('CONNECTED TO: ' + HOST + ':' + PORT);
-    // Write a message to the socket as soon as the client is connected, the server will receive it as message from the client 
-    client.write("3\na\uFFFF");
-
+	rl.question('Qual o tipo da sua Menssagem (String | Integer | Char)\n', (type) => {
+		type = handleRawType(type);
+		rl.question('Digite A Menssagem ', (body) => {
+			 client.write(getMessage(type,body));
+     		 rl.close();
+   		});
+	});
 });
 
 // Add a 'data' event handler for the client socket
@@ -19,7 +54,6 @@ client.on('data', function(data) {
     console.log("Received:", data.toString())
     // Close the client socket completely
     client.destroy();
-    
 });
 
 // Add a 'close' event handler for the client socket
