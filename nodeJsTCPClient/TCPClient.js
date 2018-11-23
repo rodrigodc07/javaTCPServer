@@ -6,13 +6,6 @@ const PORT = 12345;
 const HEAD_SEPARATOR = "\n"
 const MESSAGE_EOF = "\uFFFF"
 
-const readline = require('readline');
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
 function getMessage(type,body) {  
   return type + HEAD_SEPARATOR + body + MESSAGE_EOF;
 }
@@ -32,7 +25,6 @@ function handleRawType(type) {
 
 var inquirer = require('inquirer');
 
-
 var questions = [
   {
     type: 'list',
@@ -50,23 +42,47 @@ var questions = [
 	}
 ];
 
+function validateString(message){return true}
+
+function validateInteger(message){return message.length == 1}
+
+function validateChar(message){return message.length == 1}
+
+function validate(type,message){
+    switch(type){
+        case 1:
+            return validateString(message);
+        case 2:
+            return validateInteger(message);
+        case 3:
+            return validateChar(message);
+    }
+}
+
+function doQuestion(){
+    inquirer.prompt(questions).then(answers => {
+        type = answers.type;
+        body = answers.body;
+        isValid = validate(type,body);
+        if(isValid)
+            client.write(getMessage(type,body));
+        else{
+            console.log("Menssagem não pode ser desde tipo")
+            doQuestion();
+        }
+    });
+}
 
 var client = new net.Socket();
 client.connect(PORT, HOST, function() {
     console.log('CONNECTED TO: ' + HOST + ':' + PORT);
-	inquirer.prompt(questions).then(answers => {
-		type = answers.type;
-		body = answers.body;
-		client.write(getMessage(type,body));
-	});
+    doQuestion();
 });
 
 // Add a 'data' event handler for the client socket
 // data is what the server sent to this socket
 client.on('data', function(data) {
-
     console.log("Received:", data.toString())
-    // Close the client socket completely
     client.destroy();
 });
 
