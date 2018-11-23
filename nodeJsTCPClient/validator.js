@@ -16,6 +16,8 @@ module.exports =
                 return validateInteger(message);
             case 3:
                 return validateChar(message);
+            case -1:
+                return true
         }
     }
 }
