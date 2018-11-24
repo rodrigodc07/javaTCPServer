@@ -47,6 +47,7 @@ var questions = [
 	}
 ];
 
+var startTime;
 
 function doQuestion(){
 	rl.question('Qual o tipo da sua Menssagem (String | Int | Char)\n', (type) => {
@@ -54,8 +55,10 @@ function doQuestion(){
 		rl.question('Digite A Menssagem ', (body) => {
 		    isValid = validator.validate(type,body);
      		rl.close();
-            if(isValid)
+            if(isValid){
+                startTime = Date.now()
                 client.write(getMessage(type,body));
+            }
             else{
                 console.log("Esse tipo não permite essa menssagem")
                 doQuestion();
@@ -66,15 +69,16 @@ function doQuestion(){
 
 var client = new net.Socket();
 client.connect(PORT, HOST, function() {
-    console.log('CONNECTED TO: ' + HOST + ':' + PORT);
+    console.log('Conectado com: ' + HOST + ':' + PORT);
     doQuestion();
 });
 
 client.on('data', function(data) {
-    console.log("Received:", data.toString())
+    console.log("Resposta:", data.toString())
     client.destroy();
 });
 
 client.on('close', function() {
-    console.log('Connection closed');
+    rtt = Date.now() - startTime;
+    console.log('Encerrando Conexão apos '+ rtt +' ms');
 });
