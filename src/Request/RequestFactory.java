@@ -1,11 +1,11 @@
 package Request;
 
 import Exceptions.BadRequestException;
+import Exceptions.MalformattedRequestException;
 import Exceptions.UnsuportTypeException;
 import Message.RawMessage;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 
 public class RequestFactory {
 
@@ -22,12 +22,12 @@ public class RequestFactory {
                 case "Char":
                     return new CharRequest(message);
                 default:
-                    throw new UnsuportTypeException("Tipo não permitido");
+                    throw new UnsuportTypeException();
             }
-        } catch (IOException e) {
+        } catch (MalformattedRequestException e) {
             e.printStackTrace();
+            throw new BadRequestException();
         }
-        throw new BadRequestException("Tipo não permitido");
     }
 
 }

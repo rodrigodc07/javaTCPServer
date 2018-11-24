@@ -2,7 +2,7 @@ package Exceptions;
 
 public class BadRequestException extends Exception {
 
-    public BadRequestException(String message) {
-        super(message);
+    public BadRequestException() {
+        super("Menssagem não compativel com o tipo");
     }
 }

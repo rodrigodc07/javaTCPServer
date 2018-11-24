@@ -1,7 +1,5 @@
 package Request;
 
-import java.io.Serializable;
-
-public interface Request extends Serializable {
+public interface Request{
     public Object generateResponse();
 }

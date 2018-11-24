@@ -13,11 +13,11 @@ public class ServerTCP {
             RequestFactory requestFactory = new RequestFactory();
             System.out.println("Servidor criado com sucesso na porta "+ port);
             while(true) {
-                Socket cliente = server.accept();
-                System.out.println("Cliente conectado: " + cliente.getInetAddress().getHostAddress());
+                Socket client = server.accept();
+                System.out.println("Cliente conectado: " + client.getInetAddress().getHostAddress());
 
-                BufferedReader request_stream = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
-                PrintStream response_stream = new PrintStream(cliente.getOutputStream());
+                BufferedReader request_stream = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                PrintStream response_stream = new PrintStream(client.getOutputStream());
                 response_stream.flush();
                 try {
                     Request request = requestFactory.getRequest(request_stream);
