@@ -9,7 +9,7 @@ import java.io.BufferedReader;
 
 public class RequestFactory {
 
-    public Request getRequest(BufferedReader in) throws UnsuportTypeException, BadRequestException {
+    public Request getRequest(BufferedReader in) throws UnsuportTypeException, BadRequestException, MalformattedRequestException {
         try {
             RawMessage raw_message = new RawMessage(in);
             String type = raw_message.getRequestType();
@@ -24,7 +24,7 @@ public class RequestFactory {
                 default:
                     throw new UnsuportTypeException();
             }
-        } catch (MalformattedRequestException e) {
+        } catch (java.lang.NumberFormatException e) {
             e.printStackTrace();
             throw new BadRequestException();
         }
