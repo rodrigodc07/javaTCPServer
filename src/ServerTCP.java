@@ -8,7 +8,7 @@ import java.net.Socket;
 public class ServerTCP {
     public static void main(String[] args) {
         try {
-            int port = 12345;
+            int port = 9010;
             ServerSocket server = new ServerSocket(port);
             RequestFactory requestFactory = new RequestFactory();
             System.out.println("Servidor criado com sucesso na porta "+ port);

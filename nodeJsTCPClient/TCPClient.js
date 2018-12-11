@@ -1,8 +1,8 @@
 const net = require('net');
 const validator = require('./validator');
 
-const HOST = '127.0.0.1';
-const PORT = 12345;
+const HOST = process.env.HOST;
+const PORT = 9010;
 
 const HEAD_SEPARATOR = "\n"
 const MESSAGE_EOF = "\uFFFF"
@@ -29,23 +29,6 @@ function handleRawType(type) {
         return -1;
 	}
 }
-
-var questions = [
-  {
-    type: 'list',
-    name: 'type',
-    message: 'Qual o tipo da sua Menssagem (String | Integer | Char)',
-    choices: ['String', 'Char', 'Int'],
-    filter: function(val) {
-      return handleRawType(val);
-    }
-  },
-  {
-    type: 'input',
-    name: 'body',
-    message: "Digite A Menssagem "
-	}
-];
 
 var startTime;
 
