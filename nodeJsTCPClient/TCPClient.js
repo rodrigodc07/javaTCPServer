@@ -35,7 +35,7 @@ var startTime;
 function doQuestion(){
 	rl.question('Qual o tipo da sua Menssagem (String | Int | Char)\n', function (type)  {
 		type = handleRawType(type);
-		rl.question('Digite A Menssagem ', (body) => {
+		rl.question('Digite A Menssagem ', function (body)  {
 		    isValid = validator.validate(type,body);
      		rl.close();
             if(isValid){
