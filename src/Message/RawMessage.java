@@ -19,7 +19,7 @@ public class RawMessage {
             do {
                 count++;
                 sentence = (char) in.read();
-                if (sentence == '\uFFFF') {
+                if (sentence == '\0') {
                     hasNext = false;
                 } else {
                     message.append(sentence);
