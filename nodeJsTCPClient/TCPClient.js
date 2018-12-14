@@ -5,7 +5,7 @@ const HOST = process.env.HOST;
 const PORT = 9010;
 
 const HEAD_SEPARATOR = "\n"
-const MESSAGE_EOF = "\uFFFF"
+const MESSAGE_EOF = "\0"
 
 const readline = require('readline');
 const rl = readline.createInterface({
